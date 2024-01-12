@@ -9,7 +9,11 @@
     <!-- La fita 6 trata de hacer un registro y la fita 7 trata de hacer un update de cambio de password -->
     <h1>Login</h1>
     <?php
-        if (isset($_POST['nom'])) {
+        session_start();
+        if (isset($_SESSION['login'])) {
+            unset($_SESSION['login']);
+        }
+        if (isset($_POST['nom']) && isset($_POST['contrasenya'])) {  
             try {
                 $hostname = "localhost";
                 $dbname = "mylogin";
@@ -39,17 +43,19 @@
             if (!$row) {
                 echo "<p>Credencials invalides</p>";
             } else {
-                echo "<p>Benvingut, ".$row["nom"]."</p>";
+                $_SESSION["login"] = $userName;
+                $newURL = "logged.php";
+                header('Location: ' . $newURL);
+                exit();
             }
 
         }
     ?>
     <form method="POST">
-        <input type="text" name="nom" placeholder="usuari" required>
-        <br>
-        <input type="password" name="contrasenya" placeholder="contrasenya" required>
-        <br>
-        <input type="submit">
+        <input type="text" name="nom" placeholder="usuari" required><br>
+        <input type="password" name="contrasenya" placeholder="contrasenya" required><br>
+        <input type="submit"><br>
+        <a href="register.php">You don't have an account? Sign up</a>
     </form>
 </body>
 </html>
